@@ -144,7 +144,7 @@ jobs:
 
       - name: Setup jaspTools
         run: |
-          install.packages(c("remotes", "ragg"))
+          # install.packages(c("remotes", "ragg"))
           remotes::install_github("jasp-stats/jaspTools")
           jaspTools::setupJaspTools()
         shell: Rscript {0}
