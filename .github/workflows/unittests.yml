@@ -130,7 +130,6 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             any::remotes
-            # here have to specify install jaspTools from where
             github::jasp-stats/jaspTools
             cran::igraph
           needs: check
