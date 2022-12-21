@@ -130,7 +130,9 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             any::remotes
+            # here have to specify install jaspTools from where
             github::jasp-stats/jaspTools
+            cran::igraph
           needs: check
           cache-version: 2
 
@@ -148,16 +150,14 @@ jobs:
 
       - name: Setup jaspTools
         run: |
-          #install.packages("remotes")
-          #remotes::install_github("jasp-stats/jaspTools")
           jaspTools::setupJaspTools()
         shell: Rscript {0}
 
       # so Rstudio's binary for igraph appears to be incompatible (i.e., crashes hard) with GitHub actions. Instead, we install igraph from source
-      - name: Make sure igraph is installed from source
-        if: runner.os == 'Linux' && inputs.needs_igraph
-        run: install.packages("igraph", type = "source", repos = "https://cloud.r-project.org/")
-        shell: Rscript {0}
+#      - name: Make sure igraph is installed from source
+#        if: runner.os == 'Linux' && inputs.needs_igraph
+#        run: install.packages("igraph", type = "source", repos = "https://cloud.r-project.org/")
+#        shell: Rscript {0}
 
       - name: Run unit tests
         run: source("tests/testthat.R")
