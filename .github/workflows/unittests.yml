@@ -130,7 +130,7 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             any::remotes
-            any::jaspTools
+            any::jasp-stats/jaspTools
           needs: check
           cache-version: 2
 
