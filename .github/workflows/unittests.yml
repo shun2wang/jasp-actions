@@ -127,7 +127,8 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: ragg=?ignore
+          extra-packages: |
+            any::rcmdcheck
           needs: check
           cache-version: 2
 
@@ -145,7 +146,7 @@ jobs:
 
       - name: Setup jaspTools
         run: |
-          install.packages(c("remotes", "ragg"))
+          install.packages("remotes")
           remotes::install_github("jasp-stats/jaspTools")
           jaspTools::setupJaspTools()
         shell: Rscript {0}
