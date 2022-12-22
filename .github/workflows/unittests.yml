@@ -57,7 +57,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       _R_CHECK_LENGTH_1_CONDITION_: TRUE #deprecated from R 4.2.0
       _R_CHECK_MATRIX_DATA_: TRUE # only works from R 4.2.0 onwards
-      HOMEBREW_NO_INSTALL_CLEANUP: 1 # do not CleanUp on macOS for jags
 
     steps:
       - uses: actions/checkout@v2
@@ -87,6 +86,37 @@ jobs:
           # curl          (dependency of usethis)         requires openssl
           
           brew install harfbuzz fribidi libgit2 openssl curl
+        shell: bash
+
+      - name: Install system dependencies on linux
+        if: runner.os == 'Linux'
+        run: |
+          # ragg                                          requires libharfbuzz-dev libfribidi-dev 
+          # credentials   (dependency of usethis)         requires libgit2-dev
+          # curl          (dependency of usethis)         requires libcurl4-openssl-dev
+          sudo apt install libharfbuzz-dev libfribidi-dev libgit2-dev libcurl4-openssl-dev
+        shell: bash
+
+
+      - name: Set environment variable to never compile packages on Windows and macOS
+        if: runner.os != 'Linux' && matrix.r != 'devel'
+        run: |
+          # don't try to install new pkgs versions from source (which often requires additional system dependencies which, when missing, lead to errors, e.g., ragg).
+          cat("\noptions(install.packages.compile.from.source = \"never\")\n", file = "~/.Rprofile", sep = "", append = TRUE)
+        shell: Rscript {0}
+        
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::rcmdcheck
+            github::jasp-stats/jaspTools
+            cran::igraph
+          needs: check
+          cache-version: 2
+
+      - name: Install JAGS on Linux
+        if: runner.os == 'Linux' && inputs.needs_JAGS
+        run: sudo apt install jags
         shell: bash
 
       - name: Download JAGS and set JAGS_HOME on Windows
@@ -120,36 +150,6 @@ jobs:
           rm '/usr/local/bin/gfortran'
           brew install jags
         shell: bash
-
-      - name: Install system dependencies on linux
-        if: runner.os == 'Linux'
-        run: |
-          # ragg                                          requires libharfbuzz-dev libfribidi-dev 
-          # credentials   (dependency of usethis)         requires libgit2-dev
-          # curl          (dependency of usethis)         requires libcurl4-openssl-dev
-          sudo apt install libharfbuzz-dev libfribidi-dev libgit2-dev libcurl4-openssl-dev
-        shell: bash
-        
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: |
-            any::rcmdcheck
-            github::jasp-stats/jaspTools
-            cran::igraph
-          needs: check
-          cache-version: 2
-
-      - name: Install JAGS on Linux
-        if: runner.os == 'Linux' && inputs.needs_JAGS
-        run: sudo apt install jags
-        shell: bash
-
-      - name: Set environment variable to never compile packages on Windows and macOS
-        if: runner.os != 'Linux' && matrix.r != 'devel'
-        run: |
-          # don't try to install new pkgs versions from source (which often requires additional system dependencies which, when missing, lead to errors, e.g., ragg).
-          cat("\noptions(install.packages.compile.from.source = \"never\")\n", file = "~/.Rprofile", sep = "", append = TRUE)
-        shell: Rscript {0}
         
       - name: Setup jaspTools
         run: |
