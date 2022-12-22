@@ -70,6 +70,8 @@ jobs:
         run: |
           brew update
           brew install --cask xquartz
+          brew install libmpc
+          brew install xz
         shell: bash
         
       - name: Install system dependencies on macOS specific to R devel
