@@ -57,6 +57,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       _R_CHECK_LENGTH_1_CONDITION_: TRUE #deprecated from R 4.2.0
       _R_CHECK_MATRIX_DATA_: TRUE # only works from R 4.2.0 onwards
+      HOMEBREW_NO_INSTALL_CLEANUP: 1 # do not CleanUp on macOS for jags
 
     steps:
       - uses: actions/checkout@v2
