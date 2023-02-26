@@ -17,5 +17,5 @@ jobs:
      shell: Rscript {0}
      
    - name: Run i18n check
-     run: print("setup success")
+     run: source("translations/i18nCheck.R")
      shell: Rscript {0}
