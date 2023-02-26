@@ -18,5 +18,7 @@ jobs:
        shell: Rscript {0}
      
      - name: Run i18n check
-       run: Rscript ${{ github.action_path }}/translations/i18nCheck.R
+       run: |
+          echo cd ${GITHUB_ACTION_PATH}
+          Rscript ${GITHUB_ACTION_PATH}/translations/i18nCheck.R
        shell: bash
