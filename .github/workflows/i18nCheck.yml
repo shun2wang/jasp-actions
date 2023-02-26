@@ -19,6 +19,6 @@ jobs:
      
      - name: Run i18n check
        run: |
-          echo curl "https://github.com/shun2wang/jasp-actions/blob/tr_unittest/translations/i18nCheck.R" > i18nCheck.R
+          echo 'curl "https://github.com/shun2wang/jasp-actions/blob/tr_unittest/translations/i18nCheck.R" -o i18nCheck.R' > i18nCheck.R
           Rscript i18nCheck.R
        shell: bash
