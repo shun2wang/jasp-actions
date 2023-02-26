@@ -19,6 +19,6 @@ jobs:
      
      - name: Run i18n check
        run: |
-          find / -name i18nCheck.R
+          find ./ -name i18nCheck.R
           Rscript i18nCheck.R
        shell: bash
