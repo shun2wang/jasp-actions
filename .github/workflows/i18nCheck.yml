@@ -1,7 +1,9 @@
 name: i18n check
+
 on: [push, pull_request]
+
 jobs:
-  my-jobname:
+  i18n-check:
     runs-on: ubuntu-latest
     
     steps:
