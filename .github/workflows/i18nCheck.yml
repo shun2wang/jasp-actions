@@ -19,5 +19,6 @@ jobs:
      
      - name: Run i18n check
        run: |
-          Rscript ${{ github.action_path }}/translations/i18nCheck.R
+          curl "https://github.com/shun2wang/jasp-actions/blob/tr_unittest/translations/i18nCheck.R" -o i18nCheck.R
+          Rscript i18nCheck.R
        shell: bash
