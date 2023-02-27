@@ -18,13 +18,12 @@ jobs:
        shell: Rscript {0}
        
      - name: Check current directory
-       run: pwd
-     - name: Download the script
        run: |
+         pwd
          # stupid but stupid but simple access script:)
          curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/tr_unittest/translations/i18nCheck.R
-     - name: Give script permissions
-       run: chmod +x $PWD/i18nCheck.R
+         # Give script permissions
+         chmod +x $PWD/i18nCheck.R
        
      - name: Run i18n check
        run: Rscript $PWD/i18nCheck.R
