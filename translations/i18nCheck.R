@@ -39,7 +39,7 @@ if (length(qmlFiles) == 0) {
     
     tempData  <- data.frame(
       Source_file      = rep(filePaths), 
-      Code_line        = readLines(filePaths, warn = FALSE), 
+      Call_code        = readLines(filePaths, warn = FALSE), 
       Line_number      = 1:nrow(readL),
       Translation_call = grepl(pattern="qsTr(|Id|anslate)\\(\".*\"\\)", readL[,1])+0,
       Empty_call       = grepl(pattern="qsTr(|Id|anslate)\\(\"*\"\\)", readL[,1])+0
