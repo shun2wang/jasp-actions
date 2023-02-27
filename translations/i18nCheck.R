@@ -4,8 +4,6 @@
 library(potools)
 library(cli)
 
-try(
-          
 checkStatus <- c()
 # Generate pot meta data from R
 cli_h1("Check R translations:")
@@ -17,7 +15,7 @@ rErrorCalls <- subset(rPotData, rPotData$msgid=="", select = c("file", "call", "
 if (nrow(rErrorCalls) > 0) {
   checkStatus <- c(checkStatus, 1)
   # Warning in CLI
-  cli_alert_danger("{nrow(rErrorCalls)} empty gettext call(s) found")
+  cat(cli_alert_danger("{nrow(rErrorCalls)} empty gettext call(s) found"))
   cli_h2("Please refer to following to resolve them:")
   print.data.frame(rErrorCalls, row.names = FALSE)
   }else{
@@ -67,4 +65,3 @@ if (length(checkStatus) > 0){
 } else{
   cli_alert_success("All i18n check PASS")
 }
-)
