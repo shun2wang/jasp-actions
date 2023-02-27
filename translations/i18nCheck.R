@@ -4,6 +4,7 @@
 library(potools)
 library(cli)
 
+checkStatus <- c()
 # Generate pot meta data from R
 cli_h1("Check R translations:")
 rPotData <- potools::get_message_data(dir = ".",verbose = TRUE)
@@ -12,6 +13,7 @@ rPotData <- potools::get_message_data(dir = ".",verbose = TRUE)
 rErrorCalls <- subset(rPotData, rPotData$msgid=="", select = c("file", "call", "line_number"))
           
 if (nrow(rErrorCalls) > 0) {
+  checkStatus <- c(checkStatus, 1)
   # Warning in CLI
   cli_alert_danger("{nrow(rErrorCalls)} empty gettext call(s) found")
   cli_h2("Please refer to following to resolve them:")
@@ -37,7 +39,7 @@ if (length(qmlFiles) == 0) {
     
     tempData  <- data.frame(
       Source_file      = rep(filePaths), 
-      Code_line        = readLines(filePaths), 
+      Code_line        = readLines(filePaths, warn = FALSE), 
       Line_number      = 1:nrow(readL),
       Translation_call = grepl(pattern="qsTr(|Id|anslate)\\(\".*\"\\)", readL[,1])+0,
       Empty_call       = grepl(pattern="qsTr(|Id|anslate)\\(\"*\"\\)", readL[,1])+0
@@ -48,10 +50,17 @@ if (length(qmlFiles) == 0) {
   qmlErrorCalls <- subset(qmlSrcData, qmlSrcData$Empty_call == 1, select = c(1,3))
 
   if (nrow(qmlErrorCalls) > 0) {
-    cli_alert_danger("{nrow(qmlErrorCalls)} empty gettext call(s) found")
+    checkStatus <- c(checkStatus, 1)
+    cli_alert_danger("{nrow(qmlErrorCalls)} empty Qt translate call(s) found")
     cli_h2("Please refer to following to resolve them:")
     print.data.frame(qmlErrorCalls, row.names = FALSE)
   } else {
     cli_alert_success("QML message check PASS")
   }
 } 
+
+if (checkStatus > 0 ){
+   quit(status = 0)
+} else{
+  cli_alert_success("All i18n check PASS")
+}
