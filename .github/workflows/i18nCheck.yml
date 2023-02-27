@@ -20,7 +20,9 @@ jobs:
      - name: Check current directory
        run: pwd
      - name: Download the script
-       run: curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/tr_unittest/translations/i18nCheck.R
+       run: |
+         # stupid but stupid but simple access script:)
+         curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/tr_unittest/translations/i18nCheck.R
      - name: Give script permissions
        run: chmod +x $PWD/i18nCheck.R
        
