@@ -4,6 +4,8 @@
 library(potools)
 library(cli)
 
+tryCatch(
+          
 checkStatus <- c()
 # Generate pot meta data from R
 cli_h1("Check R translations:")
@@ -65,3 +67,4 @@ if (length(checkStatus) > 0){
 } else{
   cli_alert_success("All i18n check PASS")
 }
+)
