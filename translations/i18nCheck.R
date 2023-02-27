@@ -59,7 +59,7 @@ if (length(qmlFiles) == 0) {
   }
 } 
 
-if (checkStatus > 0 ){
+if (length(checkStatus) > 0){
   # to fail github action
   quit(status = 10)
 } else{
