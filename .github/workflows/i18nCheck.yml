@@ -17,12 +17,12 @@ jobs:
          install.packages(c("cli", "potools"))
        shell: Rscript {0}
        
-     - name: Check current directory
+     - name: Ready i18n check script
        run: |
          pwd
          # stupid but stupid but simple access script:)
          curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/tr_unittest/translations/i18nCheck.R
-         # Give script permissions
+         # give script permissions
          chmod +x $PWD/i18nCheck.R
        
      - name: Run i18n check
