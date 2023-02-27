@@ -47,7 +47,7 @@ if (length(qmlFiles) == 0) {
     qmlSrcData <- rbind(qmlSrcData, tempData)
   }
 
-  qmlErrorCalls <- subset(qmlSrcData, qmlSrcData$Empty_call == 1, select = c(1,3))
+  qmlErrorCalls <- subset(qmlSrcData, qmlSrcData$Empty_call == 1, select = c(1:3))
 
   if (nrow(qmlErrorCalls) > 0) {
     checkStatus <- c(checkStatus, 1)
