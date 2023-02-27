@@ -4,7 +4,7 @@
 library(potools)
 library(cli)
 
-tryCatch(
+try(
           
 checkStatus <- c()
 # Generate pot meta data from R
