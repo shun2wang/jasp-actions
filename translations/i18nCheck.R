@@ -60,7 +60,8 @@ if (length(qmlFiles) == 0) {
 } 
 
 if (checkStatus > 0 ){
-   quit(status = 0)
+  # to fail github action
+  quit(status = 10)
 } else{
   cli_alert_success("All i18n check PASS")
 }
