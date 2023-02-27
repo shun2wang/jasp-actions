@@ -45,12 +45,13 @@ if (length(qmlFiles) == 0) {
     qmlSrcData <- rbind(qmlSrcData, tempData)
   }
 
-qmlErrorCalls <- subset(qmlSrcData, qmlSrcData$Empty_call == 1, select = c(1,3))
+  qmlErrorCalls <- subset(qmlSrcData, qmlSrcData$Empty_call == 1, select = c(1,3))
 
-if (nrow(qmlErrorCalls) > 0) {
-  cli_alert_danger("{nrow(qmlErrorCalls)} empty gettext call(s) found")
-  cli_h2("Please refer to following to resolve them:")
-  print.data.frame(qmlErrorCalls, row.names = FALSE)
-} else {
-  cli_alert_success("QML message check PASS")
+  if (nrow(qmlErrorCalls) > 0) {
+    cli_alert_danger("{nrow(qmlErrorCalls)} empty gettext call(s) found")
+    cli_h2("Please refer to following to resolve them:")
+    print.data.frame(qmlErrorCalls, row.names = FALSE)
+  } else {
+    cli_alert_success("QML message check PASS")
+  }
 } 
