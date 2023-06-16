@@ -9,17 +9,23 @@ checkStatus <- c()
 cli_h1("Check R translations:")
 rPotData <- potools::get_message_data(dir = ".", verbose = TRUE)
 
-# Get wrong usage of gettext from .R
-rErrorCalls <- subset(rPotData, grepl(pattern="gettext(|f)\\(['\"]['\"]\\)", call), select = c("file", "call", "line_number"))
-          
-if (nrow(rErrorCalls) > 0) {
+# Get unreasonable usage of gettext from .R
+placeholderData <- subset(rPotData, grepl(pattern = "(.*%[a-zA-Z].*|.*%[0-9]*[a-zA-Z].*){2,}", call), select = c("file", "call", "line_number"))
+rEmptyCalls <- subset(rPotData, grepl(pattern = "gettext(|f)\\(['\"]['\"]\\)", call), select = c("file", "call", "line_number"))
+
+if (nrow(rEmptyCalls) > 0) {
   checkStatus <- c(checkStatus, 1)
   # Warning in CLI
-  cli_alert_danger("{nrow(rErrorCalls)} empty gettext call(s) found")
+  cli_alert_danger("found {nrow(rEmptyCalls)} empty gettext call(s)")
   cli_h2("Please refer to following to resolve them:")
-  print(rErrorCalls, row.names = FALSE)
-  } else {
-    cli_alert_success("R message check PASSED")
+  print(rEmptyCalls, row.names = FALSE)
+} else if (nrow(placeholderData) > 0) {
+  checkStatus <- c(checkStatus, 1)
+  cli_alert_danger("found {nrow(placeholderData)} multiple placeholders without index")
+  cli_h2("Please refer to following to resolve them:")
+  print(placeholderData, row.names = FALSE)
+} else {
+  cli_alert_success("R message check PASSED")
 } 
 
 cli_h1("Check QML translations:")
