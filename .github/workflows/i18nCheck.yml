@@ -25,7 +25,7 @@ jobs:
        run: |
          pwd
          # foolish but simple access script:)
-         curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/master/translations/i18nCheck.R
+         curl -o $PWD/i18nCheck.R https://raw.githubusercontent.com/shun2wang/jasp-actions/i18nCheck/translations/i18nCheck.R
          # give script permissions
          chmod +x $PWD/i18nCheck.R
        
