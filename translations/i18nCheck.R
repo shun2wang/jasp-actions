@@ -10,23 +10,43 @@ cli_h1("Check R translations:")
 rPotData <- potools::get_message_data(dir = ".", verbose = TRUE)
 
 # Get unreasonable usage of gettext from .R
-placeholderData <- subset(rPotData, grepl(pattern = "(.*%[a-zA-Z].*|.*%[0-9]*[a-zA-Z].*){2,}", call), select = c("file", "call", "line_number"))
-rEmptyCalls <- subset(rPotData, grepl(pattern = "gettext(|f)\\(['\"]['\"]\\)", call), select = c("file", "call", "line_number"))
+placeholderData <- subset(rPotData, 
+                          grepl(pattern = "(.*%[a-zA-Z].*|.*%[0-9]*[a-zA-Z].*){2,}", call) & !grepl(pattern = "%%", call), 
+                          select = c("file", "call", "line_number")
+                          )
+rEmptyCalls <- subset(rPotData, 
+                      grepl(pattern = "gettext(|f)\\(['\"]['\"]\\)", call), 
+                      select = c("file", "call", "line_number")
+                      )
+# Get po/mo compiling error
+checkPocompile <- as.character(
+  capture.output(tools::update_pkg_po("."))
+)
 
 if (nrow(rEmptyCalls) > 0) {
   checkStatus <- c(checkStatus, 1)
-  # Warning in CLI
-  cli_alert_danger("found {nrow(rEmptyCalls)} empty gettext call(s)")
+  cli_alert_danger("{nrow(rEmptyCalls)} empty gettext call(s) found")
   cli_h2("Please refer to following to resolve them:")
   print(rEmptyCalls, row.names = FALSE)
-} else if (nrow(placeholderData) > 0) {
+} 
+
+if (nrow(placeholderData) > 0) {
   checkStatus <- c(checkStatus, 1)
-  cli_alert_danger("found {nrow(placeholderData)} multiple placeholders without index")
+  cli_alert_danger("{nrow(placeholderData)} multiple placeholders without index found")
   cli_h2("Please refer to following to resolve them:")
   print(placeholderData, row.names = FALSE)
-} else {
-  cli_alert_success("R message check PASSED")
 } 
+
+if (length(checkPocompile) > 0) {
+  checkStatus <- c(checkStatus, 1)
+  cli_alert_danger("some translation error found in po file")
+  cli_h2("Please refer to following to resolve them:")
+  print(checkPocompile)
+}
+
+if (length(checkStatus) < 0) {
+  cli_alert_success("R message check PASSED")
+}
 
 cli_h1("Check QML translations:")
 # Get QML files paths
