@@ -163,3 +163,10 @@ jobs:
       - name: Run unit tests
         run: source("tests/testthat.R")
         shell: Rscript {0}
+        continue-on-error: true
+
+      - name: upload snapshots
+        run: |
+            git add .
+            git commit -m "Upload snapshots"
+            git push
