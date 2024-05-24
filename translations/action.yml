@@ -48,6 +48,6 @@ runs:
       run: ${{ github.action_path }}/updateUpstream.sh
       shell: bash
       
-    - name: Reset and unlock weblate repos
-      run: ${{ github.action_path }}/unlockWeblate.sh
-      shell: bash
+    # - name: Reset and unlock weblate repos
+    #   run: ${{ github.action_path }}/unlockWeblate.sh
+    #   shell: bash
