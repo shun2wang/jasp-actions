@@ -141,7 +141,7 @@ jaspXgettext2pot <-
                  '"Language-Team: LANGUAGE <LL@li.org>\\n"',
                  '"Language: \\n"',
                  '"MIME-Version: 1.0\\n"',
-                 '"Content-Type: text/plain; charset=CHARSET\\n"',
+                 '"Content-Type: text/plain; charset=UTF-8\\n"',
                  '"Content-Transfer-Encoding: 8bit\\n"',
                  if (length(un)) '"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n"'))
     for(e in msgid)
@@ -364,4 +364,4 @@ jasp_update_pkg_po <- function(pkgdir, pkg = NULL, version = NULL,
 }
 #  End of copied code from translations.R
 
-try(jasp_update_pkg_po(pkgdir = rootfolder, verbose = TRUE, mergeOpts = "--verbose"))
+try(jasp_update_pkg_po(pkgdir = rootfolder, verbose = TRUE))
