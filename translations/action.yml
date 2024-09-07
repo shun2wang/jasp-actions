@@ -44,6 +44,13 @@ runs:
         ${{ github.action_path }}/generateLanguageFiles.sh $GITHUB_REPOSITORY ${{ github.action_path }}
       shell: bash
 
+    - name: generate jaspDesktop data library json
+    - uses: actions/github-script@v6
+      with:
+        script: |
+            const script = require('./.github/translations/translate_json.js');
+            script({github, context});
+
     - name: push to upstream
       run: ${{ github.action_path }}/updateUpstream.sh
       shell: bash
