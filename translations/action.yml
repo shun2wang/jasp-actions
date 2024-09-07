@@ -48,7 +48,7 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-            const script = require('./.github/translations/translate_json.js');
+            const script = require('./.github/script/translate_json.js');
             script({github, context});
 
     - name: push to upstream
