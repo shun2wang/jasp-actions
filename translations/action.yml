@@ -50,7 +50,7 @@ runs:
         script: |
             const script = require('./.github/script/translate_json.js');
             const dataJson = require('./Resources/Data Sets/index.json')
-            script({github, context}, dataJson);
+            script({github, context, dataJson});
 
     - name: push to upstream
       run: ${{ github.action_path }}/updateUpstream.sh
