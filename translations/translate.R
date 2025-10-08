@@ -16,6 +16,48 @@ if(!exists("rootfolder"))
 
 Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8")
 
+# This processPoFile was not exported in R 4.5.1 now so let add it for now
+processPoFile <- function (f, potfile,
+                           localedir = file.path("inst", "po"),
+                           mergeOpts = "", # in addition to --update
+                           verbose = getOption("verbose"))
+{
+    poname <- sub("[.]po$", "", basename(f))
+    lang <- sub("^(R|RGui)-", "", poname)
+    dom <- sub("[.]pot$", "", basename(potfile))
+    mo_make <- !is.null(localedir)
+
+    ## Will not update PO file if already in sync; keeps PO-Revision-Date.
+    cmd <- paste("msgmerge",
+                 if (is.character(mergeOpts)) paste("--update", mergeOpts),
+                 shQuote(f), shQuote(potfile))
+    if (verbose) cat("Running cmd", cmd, ":\n")
+    else message("  ", poname, ":", appendLF = FALSE, domain = NA)
+    if (system(cmd) != 0L)
+        return(warning(sprintf("running msgmerge on %s failed", sQuote(f)),
+                       call. = FALSE, domain = NA))
+
+    res <- checkPoFile(f, TRUE)
+    if (nrow(res)) {
+        print(res)
+        if (mo_make) message("not installing", domain = NA)
+        ## the msgfmt -c step below would also fail (includes --check-format)
+        return(warning(sprintf("inconsistent format strings in %s", sQuote(f)),
+                       call. = FALSE, domain = NA))
+    }
+
+    if (!mo_make) return(invisible())
+    dest <- file.path(localedir, lang, "LC_MESSAGES")
+    dir.create(dest, FALSE, TRUE)
+    dest <- file.path(dest, sprintf("%s.mo", dom))
+    ## Skip compilation if PO is unchanged since last run / checkout?
+    #if (file.exists(dest) && file_test("-ot", f, dest)) return(invisible())
+    cmd <- paste("msgfmt -c --statistics -o", shQuote(dest), shQuote(f))
+    if (verbose) cat("Running cmd", cmd, ":\n")
+    if (system(cmd) != 0L)
+        return(warning(sprintf("running msgfmt on %s failed", sQuote(f)),
+                       call. = FALSE, domain = NA))
+}
 
 #  Start of copied code from R-SVN File src/library/tools/R/xgettext.R
 #  Refactoring xgettext -> jaspXgettext, access tools internal functions.
