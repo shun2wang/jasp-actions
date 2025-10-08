@@ -37,7 +37,7 @@ processPoFile <- function (f, potfile,
         return(warning(sprintf("running msgmerge on %s failed", sQuote(f)),
                        call. = FALSE, domain = NA))
 
-    res <- checkPoFile(f, TRUE)
+    res <- tools::checkPoFile(f, TRUE)
     if (nrow(res)) {
         print(res)
         if (mo_make) message("not installing", domain = NA)
