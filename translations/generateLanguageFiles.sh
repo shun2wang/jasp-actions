@@ -11,6 +11,10 @@ create_file_if_it_doesnt_exist() {
 	fi
 }
 
+clean_po_whitespace_msgstrs() {
+	sed -i -E 's/^msgstr[[:space:]]+"[[:space:]]*"$/msgstr ""/' "$1"
+}
+
 do_lupdate()	{	lupdate -locations none -extensions cpp,h,qml,cpp.in,h.in -recursive $1 -ts $2;	}
 do_msgattrib()	{	msgattrib --no-obsolete --no-location ${1} -o $1;	}
 
@@ -60,7 +64,8 @@ do
 			LANGUAGEFILE=${moduleName}/po/QML-${languageCode}.po
 			QMFILE=${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm
 		fi
-
+		
+		clean_po_whitespace_msgstrs "$LANGUAGEFILE"
 		do_lupdate   $moduleName $LANGUAGEFILE
 		do_msgattrib $LANGUAGEFILE
 		lrelease $LANGUAGEFILE -qm $QMFILE
