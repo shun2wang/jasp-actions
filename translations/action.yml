@@ -15,7 +15,7 @@ runs:
       
     - name: Find and merge weblate pull requests
       env:
-        GH_TOKEN: ${{ env.REPO_KEY }}
+        GH_TOKEN: ${{ github.token }}
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
       shell: bash
       
@@ -30,7 +30,7 @@ runs:
       if: ${{ env.QML_REPO != 'jaspdesktop' }}
       uses: actions/checkout@v3
       with:
-        token: ${{ env.REPO_KEY }}
+        token: ${{ github.token }}
 
     - name: install Qt6
       uses: jurplel/install-qt-action@v4
